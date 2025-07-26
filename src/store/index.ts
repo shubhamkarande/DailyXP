@@ -1,19 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
-import authReducer from './slices/authSlice';
-import habitReducer from './slices/habitSlice';
-import userReducer from './slices/userSlice';
+import authSlice from './slices/authSlice';
+import habitsSlice from './slices/habitsSlice';
 
 export const store = configureStore({
   reducer: {
-    auth: authReducer,
-    habits: habitReducer,
-    user: userReducer,
+    auth: authSlice,
+    habits: habitsSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: ['habits/setHabits', 'habits/addHabit', 'habits/updateHabit'],
-        ignoredPaths: ['habits.habits', 'user.profile'],
+        ignoredActions: ['persist/PERSIST'],
       },
     }),
 });

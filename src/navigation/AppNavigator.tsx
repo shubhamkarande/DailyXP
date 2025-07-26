@@ -3,15 +3,16 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useSelector, useDispatch } from 'react-redux';
-import auth from '@react-native-firebase/auth';
 import { RootState } from '../store';
 import { setUser, setLoading } from '../store/slices/authSlice';
-import { AuthScreen } from '../screens/AuthScreen';
 import { HomeScreen } from '../screens/HomeScreen';
 import { StatsScreen } from '../screens/StatsScreen';
 import { HabitsScreen } from '../screens/HabitsScreen';
 import { HabitEditorScreen } from '../screens/HabitEditorScreen';
-import { OnboardingScreen } from '../components/OnboardingScreen';
+import { SocialScreen } from '../screens/SocialScreen';
+import { ProfileScreen } from '../screens/ProfileScreen';
+import { AchievementsScreen } from '../screens/AchievementsScreen';
+import { HabitTemplatesScreen } from '../screens/HabitTemplatesScreen';
 import { RootStackParamList, MainTabParamList } from '../types';
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -39,7 +40,9 @@ const MainTabs: React.FC = () => {
         component={HomeScreen}
         options={{
           tabBarLabel: 'Today',
-          tabBarIcon: ({ color }) => <span style={{ fontSize: 24, color }}>🏠</span>,
+          tabBarIcon: ({ color }) => (
+            <span style={{ fontSize: 20, color }}>🏠</span>
+          ),
         }}
       />
       <Tab.Screen
@@ -47,7 +50,9 @@ const MainTabs: React.FC = () => {
         component={StatsScreen}
         options={{
           tabBarLabel: 'Stats',
-          tabBarIcon: ({ color }) => <span style={{ fontSize: 24, color }}>📊</span>,
+          tabBarIcon: ({ color }) => (
+            <span style={{ fontSize: 20, color }}>📊</span>
+          ),
         }}
       />
       <Tab.Screen
@@ -55,7 +60,29 @@ const MainTabs: React.FC = () => {
         component={HabitsScreen}
         options={{
           tabBarLabel: 'Habits',
-          tabBarIcon: ({ color }) => <span style={{ fontSize: 24, color }}>⚡</span>,
+          tabBarIcon: ({ color }) => (
+            <span style={{ fontSize: 20, color }}>⚡</span>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Social"
+        component={SocialScreen}
+        options={{
+          tabBarLabel: 'Social',
+          tabBarIcon: ({ color }) => (
+            <span style={{ fontSize: 20, color }}>👥</span>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          tabBarLabel: 'Profile',
+          tabBarIcon: ({ color }) => (
+            <span style={{ fontSize: 20, color }}>👤</span>
+          ),
         }}
       />
     </Tab.Navigator>
@@ -64,49 +91,66 @@ const MainTabs: React.FC = () => {
 
 export const AppNavigator: React.FC = () => {
   const dispatch = useDispatch();
-  const { isAuthenticated, isLoading } = useSelector((state: RootState) => state.auth);
 
+  // For demo purposes, we'll skip authentication and go straight to the main app
   useEffect(() => {
-    const unsubscribe = auth().onAuthStateChanged(user => {
-      if (user) {
-        dispatch(setUser({
-          uid: user.uid,
-          email: user.email!,
-          displayName: user.displayName || 'User',
-        }));
-      } else {
-        dispatch(setUser(null));
-      }
-      dispatch(setLoading(false));
-    });
-
-    return unsubscribe;
+    // Set a mock user for demo
+    dispatch(
+      setUser({
+        id: 'demo-user',
+        email: 'demo@dailyxp.com',
+        displayName: 'Demo User',
+        totalXP: 1250,
+        level: 13,
+        currentLevelXP: 50,
+        nextLevelXP: 100,
+        habits: [],
+        createdAt: new Date(),
+        achievements: [],
+        friends: [],
+        theme: 'light',
+        avatar: '🎮',
+        preferences: {
+          notifications: true,
+          reminderTime: '09:00',
+          weekStartsOn: 'monday',
+          theme: 'light',
+          soundEnabled: true,
+          vibrationEnabled: true,
+        },
+      }),
+    );
+    dispatch(setLoading(false));
   }, [dispatch]);
-
-  if (isLoading) {
-    return null; // Or a loading screen
-  }
 
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {!isAuthenticated ? (
-          <Stack.Screen name="Auth" component={AuthScreen} />
-        ) : (
-          <>
-            <Stack.Screen name="Main" component={MainTabs} />
-            <Stack.Screen
-              name="HabitEditor"
-              component={HabitEditorScreen}
-              options={{
-                headerShown: true,
-                title: 'Edit Habit',
-                headerStyle: { backgroundColor: '#10B981' },
-                headerTintColor: 'white',
-              }}
-            />
-          </>
-        )}
+        <Stack.Screen name="Main" component={MainTabs} />
+        <Stack.Screen
+          name="HabitEditor"
+          component={HabitEditorScreen}
+          options={{
+            headerShown: true,
+            title: 'Edit Habit',
+            headerStyle: { backgroundColor: '#10B981' },
+            headerTintColor: 'white',
+          }}
+        />
+        <Stack.Screen
+          name="Achievements"
+          component={AchievementsScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="HabitTemplates"
+          component={HabitTemplatesScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
