@@ -1,9 +1,9 @@
 import axios, { AxiosInstance } from 'axios';
 
-// API base URL - using laptop's IP on phone hotspot
-const API_BASE_URL = 'http://10.220.222.11:3000'; // Physical device via hotspot
+// API base URL - using ADB reverse for USB connection
+const API_BASE_URL = 'http://localhost:3000'; // ADB reverse tcp:3000 tcp:3000
+// const API_BASE_URL = 'http://10.220.222.11:3000'; // Physical device via hotspot
 // const API_BASE_URL = 'http://10.0.2.2:3000'; // Android emulator localhost
-// const API_BASE_URL = 'http://localhost:3000'; // iOS simulator
 
 class ApiService {
     private instance: AxiosInstance;

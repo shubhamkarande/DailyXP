@@ -104,18 +104,26 @@ export const loginAsGuest = createAsyncThunk(
     'auth/loginAsGuest',
     async (_, { rejectWithValue }) => {
         try {
-            const response = await api.post('/auth/guest');
-            const { token, user } = response.data;
+            // Create a local guest user (works offline without backend)
+            const guestId = `guest_${Date.now()}`;
+            const guestUser: User = {
+                id: guestId,
+                email: 'guest@dailyxp.app',
+                username: 'Guest User',
+                level: 1,
+                xp: 0,
+                totalXpEarned: 0,
+                focusAreas: ['Health', 'Productivity'],
+                isGuest: true,
+            };
+            const guestToken = `guest_token_${guestId}`;
 
-            await AsyncStorage.setItem('token', token);
-            await AsyncStorage.setItem('user', JSON.stringify(user));
-            api.setAuthToken(token);
+            await AsyncStorage.setItem('token', guestToken);
+            await AsyncStorage.setItem('user', JSON.stringify(guestUser));
 
-            return { token, user };
+            return { token: guestToken, user: guestUser };
         } catch (error: any) {
-            return rejectWithValue(
-                error.response?.data?.error || 'Guest login failed',
-            );
+            return rejectWithValue(error.message || 'Guest login failed');
         }
     },
 );

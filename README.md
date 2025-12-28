@@ -52,7 +52,7 @@ npm run dev
 ### Mobile App Setup
 
 ```bash
-cd DailyXPMobile
+cd DXP
 npm install
 
 # Start Metro bundler
@@ -77,7 +77,7 @@ DailyXP/
 │   ├── utils/               # XP & streak logic
 │   └── index.js             # Server entry
 │
-├── DailyXPMobile/           # React Native App
+├── DXP/                     # React Native App
 │   ├── src/
 │   │   ├── components/      # UI components
 │   │   ├── screens/         # App screens
@@ -87,7 +87,7 @@ DailyXP/
 │   │   └── theme/           # Design tokens
 │   └── App.tsx              # Entry point
 │
-└── stitch_select_focus_area/ # UI reference designs
+└── README.md
 ```
 
 ## 📱 Screens

@@ -5,6 +5,9 @@ import { colors } from '../theme';
 
 const { width } = Dimensions.get('window');
 
+// Convert underscore icon names to hyphen for MaterialIcons
+const formatIconName = (name: string) => name?.replace(/_/g, '-') || 'star';
+
 export interface Achievement {
     id: string;
     title: string;
@@ -54,7 +57,7 @@ const AchievementBadge: React.FC<AchievementBadgeProps> = ({
             disabled={!onPress}
             activeOpacity={0.7}>
             <Icon
-                name={achievement.icon}
+                name={formatIconName(achievement.icon)}
                 size={s.icon}
                 color={achievement.unlocked ? achievement.color : colors.text.muted}
                 style={!achievement.unlocked && styles.locked}
@@ -100,7 +103,7 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({
                     },
                 ]}>
                 <Icon
-                    name={achievement.icon}
+                    name={formatIconName(achievement.icon)}
                     size={28}
                     color={achievement.unlocked ? achievement.color : colors.text.muted}
                 />
